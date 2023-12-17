@@ -1,19 +1,17 @@
 var express = require('express');
+const { model } = require('mongoose');
 const { use } = require('.');
 var router = express.Router();
 var responseData = require('../helper/responseData');
+var modelUser = require('../schema/test')
 
-const users = [
-  { id: 1, name: "Tung" },
-  { id: 2, name: "Toan" },
-  { id: 3, name: "Tien" }
-];
 
 
 //domain:port/users
 /* GET users listing. */
-router.get('/', function (req, res, next) {
-  responseData.responseReturn(res, 200, true, users);
+router.get('/', async function (req, res, next) {
+  var usersAll = await modelUser.find({}).exec();
+  responseData.responseReturn(res, 200, true, usersAll);
 });
 router.get('/:id', function (req, res, next) {// get by ID
   var user = users.find(user => user.id == req.params.id);
@@ -47,7 +45,7 @@ router.put('/edit/:id', function (req, res, next) {
 });
 router.delete('/delete/:id', function (req, res, next) {//delete by Id
   var ids = users.map(user=>user.id);
-  var index = ids.indexOf(parseInt(req.params.id));
+  var index = ids.indexOf(parseInt(req.params.id));//===
   console.log(index);
   //var index  = users.indexOf(user);
   if (index>-1) {
@@ -57,5 +55,13 @@ router.delete('/delete/:id', function (req, res, next) {//delete by Id
     responseData.responseReturn(res, 404, false, "khong tim thay user");
   }
 });
+function genKey(length){
+  let result = "";
+  let source = "abcdefghijklmnopqrstxyzw0123456789"
+  for (let index = 0; index < length; index++) {
+    result+=source[Math.floor(Math.random()*source.length)];
+  }
+  return result;
+}
 
 module.exports = router;
