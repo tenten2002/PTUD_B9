@@ -25,11 +25,11 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/items',itemsRouter);
 
-var conn = mongoose.createConnection("mongodb://127.0.0.1:27017/TestS2");
-conn.on('connected', function(){
+mongoose.connect("mongodb://127.0.0.1:27017/TestS2");
+mongoose.connection.once('open', function(){
   console.log("thanh cong");
 });
-conn.on('disconnected', function(){
+mongoose.connection.on('error', function(){
   console.log(" k thanh cong");
 });
 
