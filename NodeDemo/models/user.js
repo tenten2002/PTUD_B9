@@ -27,5 +27,8 @@ module.exports ={
     },
     createUser:function(user){
         return new SchemaUser(user).save();
+    },
+    login:function ( userName, password){
+        return SchemaUser.checkLogin(userName,password);
     }
 }
